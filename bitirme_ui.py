@@ -13,14 +13,15 @@ from PySide2.QtCore import *
 from PySide2.QtGui import *
 from PySide2.QtWidgets import *
 
+
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(1577, 858)
+        MainWindow.resize(1584, 810)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.frame = QtWidgets.QFrame(self.centralwidget)
-        self.frame.setGeometry(QtCore.QRect(0, 10, 1581, 821))
+        self.frame.setGeometry(QtCore.QRect(-10, 0, 1601, 921))
         self.frame.setStyleSheet("QFrame{\n"
 "    \n"
 "    background-color: rgb(219, 223, 253);\n"
@@ -29,10 +30,10 @@ class Ui_MainWindow(object):
         self.frame.setFrameShadow(QtWidgets.QFrame.Raised)
         self.frame.setObjectName("frame")
         self.widget = QtWidgets.QLabel(self.frame)
-        self.widget.setGeometry(QtCore.QRect(260, 50, 1280, 720))
+        self.widget.setGeometry(QtCore.QRect(220, 20, 1351, 761))
         self.widget.setObjectName("widget")
         self.comboBox = QtWidgets.QComboBox(self.frame)
-        self.comboBox.setGeometry(QtCore.QRect(20, 120, 221, 31))
+        self.comboBox.setGeometry(QtCore.QRect(40, 470, 131, 31))
         self.comboBox.setObjectName("comboBox")
         self.comboBox.addItem("")
         self.comboBox.addItem("")
@@ -52,19 +53,22 @@ class Ui_MainWindow(object):
         self.comboBox.addItem("")
         self.comboBox.addItem("")
         self.comboBox.addItem("")
-        self.run = QtWidgets.QPushButton(self.frame)
-        self.run.setGeometry(QtCore.QRect(90, 730, 89, 25))
-        self.run.setObjectName("run")
         self.dosya_sec = QtWidgets.QPushButton(self.frame)
-        self.dosya_sec.setGeometry(QtCore.QRect(20, 70, 111, 25))
+        self.dosya_sec.setGeometry(QtCore.QRect(40, 310, 131, 31))
         self.dosya_sec.setObjectName("dosya_sec")
         self.klasor_sec = QtWidgets.QPushButton(self.frame)
-        self.klasor_sec.setGeometry(QtCore.QRect(138, 70, 101, 25))
+        self.klasor_sec.setGeometry(QtCore.QRect(40, 390, 131, 31))
         self.klasor_sec.setObjectName("klasor_sec")
+        self.label = QtWidgets.QLabel(self.frame)
+        self.label.setGeometry(QtCore.QRect(40, 40, 150, 150))
+        self.label.setText("")
+        self.label.setPixmap(QtGui.QPixmap(":/newPrefix/output-onlinepngtools (7).png"))
+        self.label.setScaledContents(True)
+        self.label.setObjectName("label")
+        self.durdur = QtWidgets.QPushButton(self.frame)
+        self.durdur.setGeometry(QtCore.QRect(40, 540, 131, 31))
+        self.durdur.setObjectName("durdur")
         MainWindow.setCentralWidget(self.centralwidget)
-        self.statusbar = QtWidgets.QStatusBar(MainWindow)
-        #self.statusbar.setObjectName("statusbar")
-        #MainWindow.setStatusBar(self.statusbar)
 
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
@@ -90,6 +94,8 @@ class Ui_MainWindow(object):
         self.comboBox.setItemText(15, _translate("MainWindow", "YOLOR-CB-512"))
         self.comboBox.setItemText(16, _translate("MainWindow", "YOLOR-FB-640"))
         self.comboBox.setItemText(17, _translate("MainWindow", "YOLOR-CB-640"))
-        self.run.setText(_translate("MainWindow", "Çalıştır"))
         self.dosya_sec.setText(_translate("MainWindow", "Dosya Seç"))
         self.klasor_sec.setText(_translate("MainWindow", "Klasör Seç"))
+        self.durdur.setText(_translate("MainWindow", "Durdur"))
+
+import bitirme_rc

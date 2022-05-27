@@ -184,13 +184,13 @@
       <string/>
      </property>
      <property name="pixmap">
-      <pixmap resource="../Documents/dönem 8 --son/bitirme/bitirme.qrc">:/newPrefix/output-onlinepngtools (7).png</pixmap>
+      <pixmap resource="bitirme.qrc">:/newPrefix/output-onlinepngtools (7).png</pixmap>
      </property>
      <property name="scaledContents">
       <bool>true</bool>
      </property>
     </widget>
-    <widget class="QPushButton" name="dosya_sec_2">
+    <widget class="QPushButton" name="durdur">
      <property name="geometry">
       <rect>
        <x>40</x>
@@ -207,6 +207,7 @@
   </widget>
  </widget>
  <resources>
+  <include location="bitirme.qrc"/>
   <include location="../Documents/dönem 8 --son/bitirme/bitirme.qrc"/>
  </resources>
  <connections/>
