@@ -184,7 +184,7 @@
       <string/>
      </property>
      <property name="pixmap">
-      <pixmap resource="bitirme.qrc">:/newPrefix/output-onlinepngtools (7).png</pixmap>
+      <pixmap resource="bitirme.qrc">:/img/output-onlinepngtools (7).png</pixmap>
      </property>
      <property name="scaledContents">
       <bool>true</bool>
@@ -208,7 +208,6 @@
  </widget>
  <resources>
   <include location="bitirme.qrc"/>
-  <include location="../Documents/dönem 8 --son/bitirme/bitirme.qrc"/>
  </resources>
  <connections/>
 </ui>

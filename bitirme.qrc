@@ -1,7 +1,5 @@
 <RCC>
-  <qresource prefix="newPrefix">
+  <qresource prefix="img">
     <file>output-onlinepngtools (7).png</file>
-    <file>output-onlinepngtools (7).png</file>
-    <file>output-onlinepngtools (8).png</file>
   </qresource>
 </RCC>
