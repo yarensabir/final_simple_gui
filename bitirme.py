@@ -14,6 +14,7 @@ class worker(QRunnable):
         self.folder = None
         self.file_format = None
         self.sig = image_signal()
+        self.stop_flag = False
 
     def check_input(self, input_folder):
         print("input =", input_folder)
@@ -89,11 +90,13 @@ class worker(QRunnable):
         if isinstance(self.folder, list):
             
             for file in self.folder:
-                print("opening =", file)
                 image = cv2.imread(file)
 
                 image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
                 self.sig.image.emit(image)
+
+                if self.stop_flag:
+                    break
 
         elif self.file_format == ".mp4" or self.file_format == ".avi":
             cap = cv2.VideoCapture(self.folder)
@@ -110,6 +113,9 @@ class worker(QRunnable):
                 else:
                     break
 
+                if self.stop_flag:
+                    break
+
         elif self.file_format == ".txt":
             with open(self.folder + self.file_format, 'r') as f:
                 for line in f:
@@ -117,6 +123,9 @@ class worker(QRunnable):
                     
                     image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
                     self.sig.image.emit(image)
+
+                    if self.stop_flag:
+                        break
 
         else:
             image = cv2.imread(self.folder)
@@ -134,13 +143,20 @@ class MainWindow(QMainWindow):
 
         self.ui.dosya_sec.clicked.connect(self.select_file)
         self.ui.klasor_sec.clicked.connect(self.select_folder)
+        self.ui.durdur.clicked.connect(self.set_stop_flag)
 
         self.worker = worker()
         self.worker.setAutoDelete(False)
 
         self.worker.sig.image.connect(self.update_img)
 
+        pmap = QPixmap("output-onlinepngtools (7).png")
+        self.ui.label.setPixmap(pmap)
+
         self.show()
+
+    def set_stop_flag(self):
+        self.worker.stop_flag = True
 
     @Slot(np.ndarray)
     def update_img(self, img):
@@ -163,6 +179,7 @@ class MainWindow(QMainWindow):
             file_name  = dial.selectedFiles()
             ret = self.worker.check_input(file_name[0])
             if ret:
+                self.worker.stop_flag = False
                 QThreadPool.globalInstance().start(self.worker)
         
     def select_folder(self):
@@ -174,6 +191,7 @@ class MainWindow(QMainWindow):
             folder_name  = dial.selectedFiles()
             ret = self.worker.check_input(folder_name[0])
             if ret:
+                self.worker.stop_flag = False
                 QThreadPool.globalInstance().start(self.worker)
 
 if __name__ == "__main__":
