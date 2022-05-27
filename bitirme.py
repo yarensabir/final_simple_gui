@@ -16,11 +16,11 @@ class worker(QRunnable):
         self.sig = image_signal()
 
     def check_input(self, input_folder):
-        if os.path.isfile(self.folder):
-            _, ext = os.path.splitext(self.folder)
-
+        print("input =", input_folder)
+        if os.path.isfile(input_folder):
+            _, ext = os.path.splitext(input_folder)
             if ext == '.mp4' or ext == '.avi' or ext == '.jpg' or ext == '.jpeg' or ext == '.png' or ext == '.txt':
-                self.format = ext
+                self.file_format = ext
                 self.folder = input_folder
                 return True
 
@@ -29,21 +29,36 @@ class worker(QRunnable):
                 print("Supported formats are 'mp4', 'avi', 'jpg', 'png' and 'jpeg'")
                 return False
 
-        elif os.path.isdir(self.folder):
+        elif os.path.isdir(input_folder):
             file_format = None
             out = list()
-            for f in os.listdir(self.folder):
+            skip_format = None
+            for f in os.listdir(input_folder):
                 name, ext = os.path.splitext(f)
-                if not (ext == '.mp4' or ext == '.avi' or ext == '.jpg' or ext == '.jpeg' or ext == '.png'):
+                if ext == skip_format:
+                    print("skipping file =", f)
+                    pass
+
+                elif not (ext == '.mp4' or ext == '.avi' or ext == '.jpg' or ext == '.jpeg' or ext == '.png'):
                     print("Unsupported file found in the folder")
                     print("file =", name + ext)
-                    s = input("To skip this file press s, to interrupt procces press i")
-                    if s != 's':
+                    s = input("To skip this file press s, to skip this file type entairly press a, to interrupt procces press i = ")
+                    if s == 'i':
+                        return False
+
+                    elif s == 'a':
+                        skip_format = ext
+                    
+                    elif s == 's':
+                        pass
+
+                    else:
+                        print("exiting")
                         return False
 
                 elif file_format is not None:
                     if ext == file_format:
-                        out.append(name + ext)
+                        out.append(input_folder + "/" + name + ext)
 
                     else:
                         print("Found different file format")
@@ -54,30 +69,34 @@ class worker(QRunnable):
                             out.clear()
 
                         elif s == "i":
+                            print("exiting")
                             return False
 
                 else:
-                    file_format = file_format
-                    out.append(name)
+                    file_format = ext
+                    out.append(input_folder + "/" + name + ext)
 
             self.file_format = file_format
             self.folder = out
+            print("exiting")
             return True
                 
         else:
-            print("Invalid Input")
+            print("Invalid Input =", input_folder)
             return False
 
     def run(self):
         if isinstance(self.folder, list):
+            
             for file in self.folder:
+                print("opening =", file)
                 image = cv2.imread(file)
 
                 image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
                 self.sig.image.emit(image)
 
         elif self.file_format == ".mp4" or self.file_format == ".avi":
-            cap = cv2.VideoCapture(self.folder + self.file_format)
+            cap = cv2.VideoCapture(self.folder)
 
             if not cap.isOpened():
                 print("Error on opening video capture")
@@ -100,7 +119,7 @@ class worker(QRunnable):
                     self.sig.image.emit(image)
 
         else:
-            image = cv2.imread(self.folder + self.file_format)
+            image = cv2.imread(self.folder)
 
             image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
             self.sig.image.emit(image)
@@ -140,20 +159,20 @@ class MainWindow(QMainWindow):
         dial.setFileMode(QFileDialog.ExistingFiles)
         dial.setNameFilters(["Text files (*.txt)", "Images (*.png *.jpg)"])
         dial.selectNameFilter("Images (*.png *.jpg)")
-        if dialog.exec_() == QFileDialog.Accept:
+        if dial.exec_():
             file_name  = dial.selectedFiles()
-            ret = self.worker.check_input(file_name)
+            ret = self.worker.check_input(file_name[0])
             if ret:
                 QThreadPool.globalInstance().start(self.worker)
-
+        
     def select_folder(self):
         dial = QFileDialog()
         dial.setAcceptMode(QFileDialog.AcceptOpen)
         dial.setFileMode(QFileDialog.Directory)
         dial.setOption(QFileDialog.ShowDirsOnly)
-        if dial.exec_() == QFileDialog.Accept:
+        if dial.exec_():
             folder_name  = dial.selectedFiles()
-            ret = self.worker.check_input(folder_name)
+            ret = self.worker.check_input(folder_name[0])
             if ret:
                 QThreadPool.globalInstance().start(self.worker)
 

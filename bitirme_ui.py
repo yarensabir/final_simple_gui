@@ -28,7 +28,7 @@ class Ui_MainWindow(object):
         self.frame.setFrameShape(QtWidgets.QFrame.StyledPanel)
         self.frame.setFrameShadow(QtWidgets.QFrame.Raised)
         self.frame.setObjectName("frame")
-        self.widget = QtWidgets.QWidget(self.frame)
+        self.widget = QtWidgets.QLabel(self.frame)
         self.widget.setGeometry(QtCore.QRect(260, 50, 1280, 720))
         self.widget.setObjectName("widget")
         self.comboBox = QtWidgets.QComboBox(self.frame)
