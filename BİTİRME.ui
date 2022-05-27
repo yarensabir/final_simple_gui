@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1577</width>
-    <height>858</height>
+    <width>1584</width>
+    <height>810</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -17,10 +17,10 @@
    <widget class="QFrame" name="frame">
     <property name="geometry">
      <rect>
-      <x>0</x>
-      <y>10</y>
-      <width>1581</width>
-      <height>821</height>
+      <x>-10</x>
+      <y>0</y>
+      <width>1601</width>
+      <height>921</height>
      </rect>
     </property>
     <property name="styleSheet">
@@ -38,53 +38,163 @@
     <widget class="QWidget" name="widget" native="true">
      <property name="geometry">
       <rect>
-       <x>260</x>
-       <y>50</y>
-       <width>1280</width>
-       <height>720</height>
+       <x>220</x>
+       <y>20</y>
+       <width>1351</width>
+       <height>761</height>
       </rect>
      </property>
     </widget>
     <widget class="QComboBox" name="comboBox">
      <property name="geometry">
       <rect>
-       <x>20</x>
-       <y>120</y>
-       <width>221</width>
+       <x>40</x>
+       <y>470</y>
+       <width>131</width>
        <height>31</height>
       </rect>
      </property>
+     <item>
+      <property name="text">
+       <string>YoloV4-FB-416</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>YoloV4-CB-416</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>YoloV4-FB-512</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>YoloV4-CB-512</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>YoloV4-FB-640</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>YoloV4-CB-640</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>YoloV5-FB-416</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>YoloV5-CB-416</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>YoloV5-FB-512</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>YoloV5-CB-512</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>YoloV5-FB-640</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>YoloV5-CB-640</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>YOLOR-FB-416</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>YOLOR-CB-416</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>YOLOR-FB-512</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>YOLOR-CB-512</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>YOLOR-FB-640</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>YOLOR-CB-640</string>
+      </property>
+     </item>
     </widget>
-    <widget class="QPushButton" name="pushButton">
+    <widget class="QPushButton" name="dosya_sec">
      <property name="geometry">
       <rect>
-       <x>90</x>
-       <y>730</y>
-       <width>89</width>
-       <height>25</height>
+       <x>40</x>
+       <y>310</y>
+       <width>131</width>
+       <height>31</height>
       </rect>
      </property>
      <property name="text">
-      <string>PushButton</string>
+      <string>Dosya Seç</string>
      </property>
     </widget>
-    <widget class="QPushButton" name="pushButton_2">
+    <widget class="QPushButton" name="klasor_sec">
      <property name="geometry">
       <rect>
-       <x>20</x>
-       <y>70</y>
-       <width>221</width>
-       <height>25</height>
+       <x>40</x>
+       <y>390</y>
+       <width>131</width>
+       <height>31</height>
       </rect>
      </property>
      <property name="text">
-      <string>PushButton</string>
+      <string>Klasör Seç</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label">
+     <property name="geometry">
+      <rect>
+       <x>40</x>
+       <y>40</y>
+       <width>150</width>
+       <height>150</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+     <property name="pixmap">
+      <pixmap resource="../Documents/dönem 8 --son/bitirme/bitirme.qrc">:/newPrefix/output-onlinepngtools (7).png</pixmap>
+     </property>
+     <property name="scaledContents">
+      <bool>true</bool>
      </property>
     </widget>
    </widget>
   </widget>
-  <widget class="QStatusBar" name="statusbar"/>
  </widget>
- <resources/>
+ <resources>
+  <include location="../Documents/dönem 8 --son/bitirme/bitirme.qrc"/>
+ </resources>
  <connections/>
 </ui>
