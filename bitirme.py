@@ -4,6 +4,8 @@
 from bitirme_ui import *
 import numpy as np
 import time, os, cv2, sys
+import darknet, random
+import torch
 
 class image_signal(QObject):
     image = Signal(np.ndarray)
@@ -15,6 +17,11 @@ class worker(QRunnable):
         self.file_format = None
         self.sig = image_signal()
         self.stop_flag = False
+        self.network_selection = "YoloV4"
+        self.fbased = True
+        self.network_size = 416
+
+        self.yolov4_data_file = "/home/aye/yolov4/rb22/rb22.data"
 
     def check_input(self, input_folder):
         print("input =", input_folder)
@@ -133,6 +140,39 @@ class worker(QRunnable):
             image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
             self.sig.image.emit(image)
 
+    def run_on_network(self, image):
+        if self.network_selection == "YoloV4":
+            return self.run_on_yolov4(image)
+
+        elif self.network_selection == "YoloV5":
+            return self.run_on_yolov5(image)
+        
+        elif self.network_selection == "YOLOR":
+            return self.run_on_yolor(image)
+
+    def del_network(self):
+        if self.network_selection == "YoloV4":
+            darknet.free_network_ptr(self.network)
+
+        elif self.network_selection == "YoloV5":
+            del self.network
+
+        elif self.network_selection == "YOLOR":
+            pass
+
+    def load_network(self):
+        if self.network_selection == "YoloV4":
+            config_file = "/home/aye/bitirme_networks/" + "fbased/" if self.fbased else "cbased/" + "yolov4/" + str(self.size) + "/bitirme.cfg"
+            weights_file = "/home/aye/bitirme_networks/" + "fbased/" if self.fbased else "cbased/" + "yolov4/" + str(self.size) + "/best.weights"
+            self.network, self.class_names, self.colors = darknet.load_network(config_file, self.yolov4_data_file, weights_file)
+
+        elif self.network_selection == "YoloV5":
+            pth = "/home/aye/bitirme_networks/" + "fbased/" if self.fbased else "cbased/" + "yolov5/" + str(self.size) + "/best.pt"
+            self.network = torch.hub.load("ultralytics/yolov5", 'custom', path=pth, device='cuda')
+
+        elif self.network_selection == "YOLOR":
+            pass
+
 class MainWindow(QMainWindow):
     def __init__(self):
         QMainWindow.__init__(self)
@@ -144,6 +184,7 @@ class MainWindow(QMainWindow):
         self.ui.dosya_sec.clicked.connect(self.select_file)
         self.ui.klasor_sec.clicked.connect(self.select_folder)
         self.ui.durdur.clicked.connect(self.set_stop_flag)
+        self.ui.comboBox.indexChanged(self.get_selected_network)
 
         self.worker = worker()
         self.worker.setAutoDelete(False)
@@ -154,6 +195,14 @@ class MainWindow(QMainWindow):
         self.ui.label.setPixmap(pmap)
 
         self.show()
+
+    def get_selected_network(self):
+        nt. type, size = self.ui.comboBox.currentText().split("-")
+        self.worker.del_network()
+        self.worker.network_selection = nt
+        self.worker.fbased = True if type == "FB" else False
+        self.worker.network_size = int(size)
+        self.worker.load_network()
 
     def set_stop_flag(self):
         self.worker.stop_flag = True
