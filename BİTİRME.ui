@@ -54,98 +54,8 @@
        <height>31</height>
       </rect>
      </property>
-     <item>
-      <property name="text">
-       <string>YoloV4-FB-416</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>YoloV4-CB-416</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>YoloV4-FB-512</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>YoloV4-CB-512</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>YoloV4-FB-640</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>YoloV4-CB-640</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>YoloV5-FB-416</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>YoloV5-CB-416</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>YoloV5-FB-512</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>YoloV5-CB-512</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>YoloV5-FB-640</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>YoloV5-CB-640</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>YOLOR-FB-416</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>YOLOR-CB-416</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>YOLOR-FB-512</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>YOLOR-CB-512</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>YOLOR-FB-640</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>YOLOR-CB-640</string>
-      </property>
-     </item>
     </widget>
-    <widget class="QPushButton" name="run">
+    <widget class="QPushButton" name="pushButton">
      <property name="geometry">
       <rect>
        <x>90</x>
@@ -155,37 +65,25 @@
       </rect>
      </property>
      <property name="text">
-      <string>Çalıştır</string>
+      <string>PushButton</string>
      </property>
     </widget>
-    <widget class="QPushButton" name="dosya_sec">
+    <widget class="QPushButton" name="pushButton_2">
      <property name="geometry">
       <rect>
        <x>20</x>
        <y>70</y>
-       <width>111</width>
+       <width>221</width>
        <height>25</height>
       </rect>
      </property>
      <property name="text">
-      <string>Dosya Seç</string>
-     </property>
-    </widget>
-    <widget class="QPushButton" name="klasor_sec">
-     <property name="geometry">
-      <rect>
-       <x>138</x>
-       <y>70</y>
-       <width>101</width>
-       <height>25</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>Klasör Seç</string>
+      <string>PushButton</string>
      </property>
     </widget>
    </widget>
   </widget>
+  <widget class="QStatusBar" name="statusbar"/>
  </widget>
  <resources/>
  <connections/>
