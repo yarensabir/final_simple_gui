@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 from bitirme_ui import *
+from yolor import *
 import numpy as np
 import time, os, cv2, sys
 import darknet, random
@@ -18,10 +19,12 @@ class worker(QRunnable):
         self.sig = image_signal()
         self.stop_flag = False
         self.network_selection = "YoloV4"
+        self.network_type = ""
         self.fbased = True
         self.network_size = 416
 
         self.yolov4_data_file = "/home/aye/yolov4/rb22/rb22.data"
+        self.device = torch.device('cuda')
 
     def check_input(self, input_folder):
         print("input =", input_folder)
@@ -158,7 +161,7 @@ class worker(QRunnable):
             del self.network
 
         elif self.network_selection == "YOLOR":
-            pass
+            del self.network
 
     def load_network(self):
         if self.network_selection == "YoloV4":
@@ -167,11 +170,63 @@ class worker(QRunnable):
             self.network, self.class_names, self.colors = darknet.load_network(config_file, self.yolov4_data_file, weights_file)
 
         elif self.network_selection == "YoloV5":
-            pth = "/home/aye/bitirme_networks/" + "fbased/" if self.fbased else "cbased/" + "yolov5/" + str(self.size) + "/best.pt"
+            pth = "/home/aye/bitirme_networks/" + "fbased/" if self.fbased else "cbased/" + "yolov5/" + str(self.network_type) + str(self.size) + "/best.pt"
             self.network = torch.hub.load("ultralytics/yolov5", 'custom', path=pth, device='cuda')
 
         elif self.network_selection == "YOLOR":
-            pass
+            pth = "/home/aye/bitirme_networks/" + "fbased/" if self.fbased else "cbased/" + "yolor/" + str(self.network_type) + str(self.size) + "/best.pt"
+            self.network = load_yolor(pth, device=self.device)
+            self.network = self.network.half()
+            self.class_names = self.model.module.names if hasattr(model, 'module') else self.model.names
+            self.colors = [[random.randint(0, 255) for _ in range(3)] for _ in self.class_names]
+
+    def run_on_yolov4(self, img):
+        prev_time = time.time()
+
+        drk_image = darknet.make_image(self.size, self.size, 3)
+        img_rgb = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+        im_resize = cv2,resize(img_rgb, (self.size, self.size), interpolation=cv2.INTER_LINEAR)
+        darknet.copy_image_from_bytes(drk_image, im_resize.tobytes())
+
+        detections = darknet.detect_image(self.network, self.class_names, drk_image)
+        darknet.free_image(drk_image)
+
+        return darknet.draw_boxes(detections, im_resize, self.colors)
+
+    def run_on_yolov5(self, img):
+        img_rgb = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+
+        results = self.network(img_rgb, size=self.size)
+
+        results.print()
+
+    def run_on_yolor(self, img):
+        orj_img = img.copy()
+
+        img = letterbox(img, self.size, 64)[0]
+        img = img[:, :, ::-1].transpose(2, 0, 1)
+        img = np.ascontiguousarray(img)
+
+        img = torch.from_numpy(img).to(self.device)
+        img = img.half()
+
+        img /= 255
+        if img.ndimension() == 3:
+            img = img.unsqueeze(0)
+
+        pred = self.network(img)[0]
+        pred = non_max_suppression(pred)
+
+        for i, det in enumerate(pred):
+            gn = torch.tensor(orj_img.shape)[[1, 0, 1, 0]]
+            if len(det):
+                det[:, :4] = scale_coords(img.shape[2:], det[:, :4], orj_img.shape).round()
+
+                for *xyxy, conf, cls in reversed(det):
+                    label = '%s %.2f' % (self.class_names[int(cls)], conf)
+                    plot_one_box(xyxy, orj_img, label=label, color=self.colors[int(cls)], line_thickness=3)
+        
+        return orj_img
 
 class MainWindow(QMainWindow):
     def __init__(self):
@@ -199,7 +254,15 @@ class MainWindow(QMainWindow):
     def get_selected_network(self):
         nt. type, size = self.ui.comboBox.currentText().split("-")
         self.worker.del_network()
-        self.worker.network_selection = nt
+        if len(nt.split("_")) > 1:
+            ns, nt = nt.split("_")
+            self.worker.network_selection = ns
+            self.worker.network_type = nt
+
+        else:
+            self.worker.network_selection = nt
+            self.worker.network_type = ""
+
         self.worker.fbased = True if type == "FB" else False
         self.worker.network_size = int(size)
         self.worker.load_network()
